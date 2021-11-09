@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
+import ArticleModal from '../ArticleModal/ArticleModal';
+import Accordion from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 import { ROUTE_ARTICLE_PREFIX, ROUTE_ARTICLE_CREATE } from '../../constants';
 import { listArticles } from '../../services/articles';
@@ -18,12 +22,14 @@ function ArticleList() {
     }, []);
 
     const renderArticles = () => articles.map((article) => {
-        const { id, title } = article;
+        const { id, title, author, authorId } = article;
 
         return (
             <tr key={ id }>
                 <td>
-                    <Link to={ `${ROUTE_ARTICLE_PREFIX}/${id}` }>{ title }</Link>
+                    <Link to={ `${ROUTE_ARTICLE_PREFIX}/${id}` }>{ title }</Link> <br></br>
+                    <div>{ article.authorId ? `Author: ${article?.author.firstName} ${article?.author.lastName}` : ''}</div> <br></br>
+                    <ArticleModal article = {article} /> <br></br>
                 </td>
             </tr>
         );

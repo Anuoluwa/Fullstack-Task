@@ -6,15 +6,17 @@ import Button from 'react-bootstrap/Button';
 import { ROUTE_ARTICLE_LIST } from '../../constants';
 import { createArticle } from '../../services/articles';
 import RegionDropdown from '../../components/RegionDropdown/RegionDropdown';
+import AuthorDropdown from '../../components/AuthorDropdown/AuthorDropdown';
 
 function ArticleCreate() {
     const history = useHistory();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [authorId, setAuthorId] = useState(null);
     const [regions, setRegions] = useState([]);
 
     const handleSave = async () => {
-        const payload = { title, content, regions };
+        const payload = { title, content, authorId, regions };
         await createArticle(payload);
         history.push(ROUTE_ARTICLE_LIST);
     };
@@ -40,6 +42,13 @@ function ArticleCreate() {
                         rows="5"
                         value={ content }
                         onChange={ (event) => setContent(event.target.value) }
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Choose Author: </Form.Label>
+                    <AuthorDropdown
+                        value={ authorId }
+                        onChange={ (author) => setAuthorId(author.id) }
                     />
                 </Form.Group>
                 <Form.Group>

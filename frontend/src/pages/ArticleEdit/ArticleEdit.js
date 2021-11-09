@@ -6,12 +6,14 @@ import Button from 'react-bootstrap/Button';
 import { ROUTE_ARTICLE_LIST } from '../../constants';
 import { getArticle, editArticle } from '../../services/articles';
 import RegionDropdown from '../../components/RegionDropdown/RegionDropdown';
+import AuthorDropdown from '../../components/AuthorDropdown/AuthorDropdown';
 
 function ArticleEdit(props) {
     const history = useHistory();
     const { articleId } = useParams();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [authorId, setAuthorId] = useState(null);
     const [regions, setRegions] = useState([]);
 
     useEffect(() => {
@@ -19,6 +21,7 @@ function ArticleEdit(props) {
             const data = await getArticle(articleId);
             setTitle(data.title);
             setContent(data.content);
+            setAuthorId(data.authorId)
             setRegions(data.regions);
         };
 
@@ -26,7 +29,7 @@ function ArticleEdit(props) {
     }, [articleId]);
 
     const handleSave = async () => {
-        const payload = { title, content, regions };
+        const payload = { title, content, authorId, regions };
         await editArticle(articleId, payload);
         history.push(ROUTE_ARTICLE_LIST);
     };
@@ -52,6 +55,13 @@ function ArticleEdit(props) {
                         rows="5"
                         value={ content }
                         onChange={ (event) => setContent(event.target.value) }
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Choose Author: </Form.Label>
+                    <AuthorDropdown
+                        value={ authorId }
+                        onChange={ (author) => setAuthorId(author.id) }
                     />
                 </Form.Group>
                 <Form.Group>
